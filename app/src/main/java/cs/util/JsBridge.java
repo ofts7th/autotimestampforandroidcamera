@@ -65,14 +65,4 @@ public class JsBridge {
 	public String getChild(String s) {
 		return this.util.getChild(s);
 	}
-
-	@JavascriptInterface
-	public void addExifByFileName(){
-		this.util.addExifByFileName();
-	}
-
-	@JavascriptInterface
-	public void addTimeStampToDir(){
-		this.util.addTimeStampToDir();
-	}
 }

@@ -34,20 +34,18 @@ public class ImageUtil {
 
     public static void addTimeStamp(String path) {
         try {
-            String backPath = path + ".bak";
-            File bakFile = new File(backPath);
-            new File(path).renameTo(bakFile);
-
-            Bitmap bitmap = BitmapFactory.decodeFile(backPath);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
             bitmap = drawTextToRightBottom(bitmap, Util.formatDateHM(new Date()), Integer.valueOf(Util.getConfig("txtWatermarkSize")), Color.parseColor("#" + Util.getConfig("txtWatermarkColor")), Integer.valueOf(Util.getConfig("txtWatermarkRightMargin")), Integer.valueOf(Util.getConfig("txtWatermarkBottomMargin")));
 
             byte[] destBytes = converBitmap2Bytes(bitmap);
-            FileOutputStream fos = new FileOutputStream(path);
+
+            String newPath = path + ".new";
+            FileOutputStream fos = new FileOutputStream(newPath);
             fos.write(destBytes);
             fos.close();
 
-            ExifInterface exifSrc = new ExifInterface(backPath);
-            ExifInterface exifDest = new ExifInterface(path);
+            ExifInterface exifSrc = new ExifInterface(path);
+            ExifInterface exifDest = new ExifInterface(newPath);
 
             copyExif(exifSrc, exifDest, ExifInterface.TAG_ORIENTATION);
             copyExif(exifSrc, exifDest, ExifInterface.TAG_DATETIME);
@@ -65,7 +63,9 @@ public class ImageUtil {
 
             exifDest.saveAttributes();
 
-            bakFile.delete();
+            File srcFile = new File(path);
+            srcFile.delete();
+            new File(newPath).renameTo(srcFile);
         } catch (Exception ex) {
             Log.d("test", ex.getMessage());
         }

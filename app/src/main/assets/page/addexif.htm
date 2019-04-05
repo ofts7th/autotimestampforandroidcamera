@@ -1,0 +1,57 @@
+<div class="cs_page" id="page_asset_addexif">
+	<div class="titlebar">
+		根据文件名添加时间戳
+	</div>
+	<div class="container">
+		<div class="row csrow btnseldir" data-dir="..">
+			..
+		</div>
+		<div class="folders">
+
+		</div>
+		<div class="row csrow aligncenter">
+			<button class="btn btn-default btnSave">处理</button>
+		</div>
+	</div>
+	<script>
+	$(function(){
+		var pageEle = $('#page_asset_addexif');
+
+		function gotoNext(s){
+			pageEle.find('.folders').empty();
+			var data = local.getChild(s);
+			if(data == ''){
+				return;
+			}
+			var arr_data = data.split(';');
+			var arr_dir = arr_data[0].split(',');
+			for(var i=0;i<arr_dir.length;i++){
+				var s = arr_dir[i];
+				if(s.length > 0){
+					var n = $('<div class="row csrow btnseldir" data-dir="'+s+'">'+s+'</div>');
+					pageEle.find('.folders').append(n);
+				}
+			}
+			var arr_file = arr_data[1].split(',');
+			for(var i=0;i<arr_file.length;i++){
+				var s = arr_file[i];
+				if(s.length > 0){
+					var n = $('<div class="row csrow btnselfile" data-file="'+s+'">'+s+'</div>');
+					pageEle.find('.folders').append(n);
+				}
+			}
+		}
+
+		pageEle.on('click', '.btnseldir', function(){
+			var self = $(this);
+			gotoNext(self.data('dir'));
+		});
+
+		pageEle.find('.btnSave').click(function(){
+
+		});
+
+		gotoNext('');
+	});
+	</script>
+</div>

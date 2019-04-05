@@ -1,0 +1,192 @@
+/*-----------global-----------*/
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+div, img {
+    border-style: none;
+    border-color: inherit;
+    border-width: 0;
+}
+img{
+	max-width: 100%;
+}
+body {
+    color: #010101;
+}
+ol, ul {
+    list-style: none;
+}
+.hidden, .cshidden{
+	display: none;
+}
+.clear {
+    clear: both;
+}
+.field-validation-error, .required {
+    color: Red;
+}
+.fullwidth{
+	width: 100%;
+}
+.relative{
+    position: relative;
+}
+.absolute{
+    position: absolute;
+}
+.aligncenter{
+	text-align: center;
+}
+.floatleft{
+	float: left;
+}
+.floatright{
+	float: right;
+}
+.fullfill{
+    position: absolute;
+    left:0;
+    top:0;
+    bottom: 0;
+    right:0;
+}
+
+/*文本过长不换行的css*/
+.text-overflow{
+    display:block;
+    word-break:keep-all;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+#global-content{
+    
+}
+.titlebar{
+	background-color: #dd3030;
+	height: 4rem;
+	line-height: 4rem;
+	color: white;
+	font-size: 1.5rem;
+	font-weight: bold;
+	text-align: center;
+}
+.cs_page .panel{
+	border-color: #7a7061;
+	background-color: transparent;
+}
+.csrow{
+    padding: 0.8em;
+    border-bottom: 1px dashed #baa688;
+}
+#global-loading-window {
+    display: none;
+    position: fixed;
+    z-index: 999999;
+}
+#global-cs-popup-background{
+    z-index: 600; 
+    position: fixed; 
+    opacity: 0.1;
+    background-color: #000000; 
+    left: 0; 
+    top: 0;
+}
+.cs_popup {
+    position: fixed;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: 2px solid #b8bab9;
+}
+.cs_popup .title_bar {
+    height: 30px;
+    background-color: #fea875;
+    line-height: 30px;
+}
+.cs_popup .title_bar .title{
+    display: inline-block;
+    margin-left: 5px;
+    font-weight: bold;
+}
+.cs_popup .content {
+    overflow: auto;
+}
+#divGlobalAlert .message, #divGlobalConfirm .message{
+    padding: 1em;
+}
+#divGlobalAlert .buttons, #divGlobalConfirm .buttons{
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+#divGlobalAlert .buttons a, #divGlobalConfirm .buttons a{
+    padding: 0.5em 2em;
+}
+
+#divGlobalMenu{
+    position: absolute;
+    z-index: 10000;
+    left: 0.5em;
+    bottom: 0.2em;
+    right: 0.5rem;
+    font-size: 1.8rem;
+	font-weight: bold;
+	color: #589bf1;
+    line-height: 3em;
+    text-align: center;
+}
+#divGlobalMenu .menuitems{
+    background-color: white;
+	border-radius: 5px;
+	margin-bottom: 0.5em;
+}
+#divGlobalMenu .menuitems .item{
+	border-bottom: 1px solid #ccc;
+}
+#divGlobalMenu .cancel{
+    background-color: white;
+	border-radius: 5px;
+}
+#div-global-progress{
+	position: fixed;
+	width: 400px;
+	background-color: #d81d16;
+	height: 40px;
+	z-index: 700; 
+}
+#global-progressbar{
+	background-color: #f0cb01;
+	height: 40px;
+}
+
+/*pagepart*/
+.noborder{
+	border: none!important;	
+}
+.noborderbottom{
+	border-bottom: none!important;
+}
+.padding05{
+	padding: 0.5rem!important;
+}
+.padding1{
+	padding: 1rem!important;
+}
+.btn-default {
+	border-radius: 5px;
+	background-color: #f2e0e0;
+	color: #b06367;
+}
+.btn-default, .btn-default:hover, .btn-default:visited{
+	text-decoration: none;
+}
+.pageheader{
+	background-color: #dd3030;
+	height: 4rem;
+	line-height: 4rem;
+	color: white;
+	font-size: 1.5rem;
+	font-weight: bold;
+}

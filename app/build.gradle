@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "cs.timestamp"
+        minSdkVersion 14
+        targetSdkVersion 24
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+    }
+	
+	lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+	signingConfigs {
+        releaseConfig {
+            keyAlias 'android'
+            keyPassword '666666'
+            storeFile file('x:\\projects\\keystore\\android.store')
+            storePassword '666666'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+			signingConfig signingConfigs.releaseConfig
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:24+'
+}
+
+task moveApk(dependsOn: "assembleRelease")<<{
+	copy {
+		from 'build/outputs/apk'
+		into 'apk'
+		rename ('app-release.apk', 'timestamp.apk')
+	}
+}
+task mytask(dependsOn: moveApk) <<{
+}

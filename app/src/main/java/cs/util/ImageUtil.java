@@ -18,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cs.string;
@@ -43,7 +45,7 @@ public class ImageUtil {
         showTimeOnImage = Util.getConfig("showTimeOnImage", "true");
         waterMarkSuffix = Util.getConfig("waterMarkSuffix", "");
         txtWatermarkSize = Integer.valueOf(Util.getConfig("txtWatermarkSize", "60"));
-        String txtWatermarkColor = Util.getConfig("txtWatermarkColor", "ffa100");
+        txtWatermarkColor = Util.getConfig("txtWatermarkColor", "ffa100");
         txtWatermarkRightMargin = Integer.valueOf(Util.getConfig("txtWatermarkRightMargin", "60"));
         txtWatermarkBottomMargin = Integer.valueOf(Util.getConfig("txtWatermarkBottomMargin", "60"));
         imgJpegQulity = Integer.valueOf(Util.getConfig("imgJpegQulity", "75"));
@@ -56,6 +58,10 @@ public class ImageUtil {
     }
 
     public static void addTimeStamp(String path) {
+        addTimeStamp(path, null);
+    }
+
+    public static void addTimeStamp(String path, Date date) {
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             int imageWidth = bitmap.getWidth();
@@ -66,12 +72,16 @@ public class ImageUtil {
                 return;
             }
 
+            if (date == null) {
+                date = new Date();
+            }
             String waterMark = "";
             if (showTimeOnImage.equals("false")) {
-                waterMark += Util.formatDate(new Date());
+                waterMark += Util.formatDate(date);
             } else {
-                waterMark += Util.formatDateHM(new Date());
+                waterMark += Util.formatDateHM(date);
             }
+
             if (!string.IsNullOrEmpty(waterMarkSuffix)) {
                 waterMark += waterMarkSuffix;
             }
@@ -108,7 +118,7 @@ public class ImageUtil {
             srcFile.delete();
             new File(newPath).renameTo(srcFile);
         } catch (Exception ex) {
-            Log.d("test", ex.getMessage());
+            Log.d("exception", ex.getMessage());
         }
     }
 
@@ -150,5 +160,34 @@ public class ImageUtil {
     public static float getDpRatio(int imgWidth, int imgHeight) {
         float bigger = imgWidth > imgHeight ? (float) imgWidth : (float) imgHeight;
         return bigger / 2000;
+    }
+
+    public static String getShottimeByExif(String filePath) {
+        try {
+            ExifInterface exifSrc = new ExifInterface(filePath);
+            return exifSrc.getAttribute(ExifInterface.TAG_DATETIME);
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    private static SimpleDateFormat format1 = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+
+    private static Date parseDate1(String s) {
+        try {
+            return format1.parse(s);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Date parseShotDate(String s) {
+        if (string.IsNullOrEmpty(s))
+            return null;
+
+        if (Util.isStringMatch(s, "[0-9]{4}:[0-9]{1,2}:[0-9]{1,2}\\s?[0-9]{0,2}:?[0-9]{0,2}:?[0-9]{0,2}")) {
+            return parseDate1(s);
+        }
+        return null;
     }
 }

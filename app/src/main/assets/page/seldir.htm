@@ -1,4 +1,4 @@
-<div class="cs_page" id="page_asset_addexif">
+<div class="cs_page" id="page_asset_seldir">
 	<div class="titlebar">
 		文件浏览
 	</div>
@@ -18,7 +18,7 @@
 	</div>
 	<script>
 	$(function(){
-		var pageEle = $('#page_asset_addexif');
+		var pageEle = $('#page_asset_seldir');
 
 		function gotoNext(s){
 			pageEle.find('.folders').empty();
@@ -52,7 +52,7 @@
 		});
 
 		pageEle.find('.btnSave').click(function(){
-
+			$.cs.gotoPage({source: 'asset', url: nextPageForSelDir});
 		});
 
 		gotoNext('');

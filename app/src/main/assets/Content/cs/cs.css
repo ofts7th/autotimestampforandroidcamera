@@ -24,7 +24,7 @@ ol, ul {
 .clear {
     clear: both;
 }
-.field-validation-error, .required {
+.error, .field-validation-error, .required {
     color: Red;
 }
 .fullwidth{

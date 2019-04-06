@@ -1,7 +1,7 @@
-#page_asset_addexif .btnseldir{
+#page_asset_seldir .btnseldir{
     background-color: #ffffcc;
 }
 
-#page_asset_addexif .btnselfile{
+#page_asset_seldir .btnselfile{
     background-color: #ccffcc;
 }

@@ -1,0 +1,45 @@
+<div class="cs_page" id="page_asset_manualaddwatermark">
+    <div class="titlebar">
+        图片
+    </div>
+    <div class="images">
+
+    </div>
+    <div class="row csrow aligncenter">
+        <button class="btn btn-default btnSave">处理</button>
+    </div>
+    <script>
+	$(function(){
+		var pageEle = $('#page_asset_manualaddwatermark');
+        var imagesData = local.getImagesData();
+        var images = [];
+        if(imagesData == ''){
+            pageEle.find('.images').html('no image found')
+        }else{
+            images = eval('('+imagesData+')');
+            for(var i=0;i<images.length;i++){
+                var img = images[i];
+                var h = '<div class="row csrow">' + img.name + '</div>';
+                h += '<div><img src="file://'+img.path+'" /></div>';
+                h += '<div class="imgdata" data-idx="'+i+'">';
+                if(img.date){
+                    h += '<div>'+img.date+'</div>';
+                }else{
+                    h += '<input class="error" value="'+img.exif+'" />';
+                }
+                h += '</div>';
+                pageEle.find('.images').append($(h));
+            }
+        };
+
+        pageEle.find('.btnSave').click(function(){
+            pageEle.find('.imgdata').each(function(idx){
+                var ele = $(this);
+                var img = images[ele.data('idx')];
+                local.manualAddWaterMark(img.path);
+            });
+            $.cs.showMessage('处理完成');
+        });
+	});
+	</script>
+</div>

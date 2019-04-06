@@ -86,6 +86,7 @@ public class Util {
             return null;
         }
     }
+
     public static Date parseImageDate(String str) {
         try {
             return imageDateFormat.parse(str);
@@ -143,9 +144,9 @@ public class Util {
                 String baseUrl = Util.getConfig("baseUrl");
                 if (!string.IsNullOrEmpty(baseUrl)) {
                     String uuid = Util.getWebUrl(baseUrl + "/phone/getuuid.htm");
-                    if(!string.IsNullOrEmpty(uuid)){
+                    if (!string.IsNullOrEmpty(uuid)) {
                         Session.getInstance().setValue("machineId", uuid);
-						Util.saveConfig("deviceId", uuid);
+                        Util.saveConfig("deviceId", uuid);
                     }
                 }
             } else {
@@ -269,7 +270,7 @@ public class Util {
         return result.trim();
     }
 
-    public static void log(String m){
+    public static void log(String m) {
         asyncGetWebUrl("http://192.168.123.230:8080/web/log?m=" + m);
     }
 
@@ -317,5 +318,9 @@ public class Util {
 
         }
         return null;
+    }
+
+    public static boolean isStringMatch(String str, String p) {
+        return Pattern.compile(p).matcher(str).matches();
     }
 }

@@ -9,6 +9,9 @@ import android.os.Message;
 import android.util.Log;
 import android.webkit.WebView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -18,6 +21,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -381,6 +385,7 @@ public class WebViewActivityUtil {
             }
         }
         String s = "";
+        Collections.sort(dirs);
         for (int i = 0; i < dirs.size(); i++) {
             if (i > 0) {
                 s += ",";
@@ -388,6 +393,7 @@ public class WebViewActivityUtil {
             s += dirs.get(i);
         }
         s += ";";
+        Collections.sort(files);
         for (int i = 0; i < files.size(); i++) {
             if (i > 0) {
                 s += ",";
@@ -400,7 +406,43 @@ public class WebViewActivityUtil {
         return s;
     }
 
-    public void refreshConfig(){
+    public void refreshConfig() {
         ImageUtil.refreshConfig();
+    }
+
+    public String getImagesData() {
+        File[] files = currentDir.listFiles();
+        if (files == null || files.length == 0)
+            return "";
+
+        JSONArray arrData = new JSONArray();
+        for (File f : files) {
+            String filePath = f.getAbsolutePath();
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("name", f.getName());
+                obj.put("path", filePath);
+                String exifDate = ImageUtil.getShottimeByExif(filePath);
+                obj.put("exif", exifDate);
+                Date date = ImageUtil.parseShotDate(exifDate);
+                if (date != null) {
+                    obj.put("date", Util.formatDateHM(date));
+                }
+                arrData.put(obj);
+            } catch (Exception ex) {
+                
+            }
+        }
+        return arrData.toString();
+    }
+
+    public void manualAddWaterMark(String path, String strDate) {
+        Date date;
+        if (string.IsNullOrEmpty(strDate)) {
+            date = ImageUtil.parseShotDate(ImageUtil.getShottimeByExif(path));
+        } else {
+            date = Util.parseDate(strDate);
+        }
+        ImageUtil.addTimeStamp(path, date);
     }
 }

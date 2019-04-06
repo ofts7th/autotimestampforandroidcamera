@@ -5,18 +5,24 @@
     <div class="csrow assetpagelink" data-url="conf.htm">
         水印设置
     </div>
-    <div class="csrow assetpagelink" data-url="addexif.htm">
-        文件浏览
+    <div class="csrow seldir">
+        手动添加水印
     </div>
     <div class="csrow">
         <a href="javascript:;" class="closeapp btn btn-default">关闭程序</a>
     </div>
     <script>
+        var nextPageForSelDir = "";
         $(function(){
             var pageEle = $('#page_asset_index');
             pageEle.find('.closeapp').click(function(){
                 local.exitApp();
-            })
+            });
+
+            pageEle.find('.seldir').click(function(){
+                nextPageForSelDir = "manualaddwatermark.htm";
+                $.cs.gotoPage({source: 'asset', url: 'seldir.htm'});
+            });
         });
     </script>
 </div>

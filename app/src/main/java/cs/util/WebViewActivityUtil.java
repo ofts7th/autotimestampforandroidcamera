@@ -417,10 +417,15 @@ public class WebViewActivityUtil {
 
         JSONArray arrData = new JSONArray();
         for (File f : files) {
+            String fileName = f.getName().trim();
+            String lFileName = fileName.toLowerCase();
+            if (!lFileName.endsWith(".jpg") && !lFileName.endsWith(".jpeg")) {
+                continue;
+            }
             String filePath = f.getAbsolutePath();
             JSONObject obj = new JSONObject();
             try {
-                obj.put("name", f.getName());
+                obj.put("name", fileName);
                 obj.put("path", filePath);
                 String exifDate = ImageUtil.getShottimeByExif(filePath);
                 obj.put("exif", exifDate);
@@ -430,7 +435,7 @@ public class WebViewActivityUtil {
                 }
                 arrData.put(obj);
             } catch (Exception ex) {
-                
+
             }
         }
         return arrData.toString();

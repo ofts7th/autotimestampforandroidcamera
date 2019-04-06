@@ -46,7 +46,7 @@ public class JsBridge {
 	}
 	@JavascriptInterface
 	public String getConfig(String k) {
-		return Util.getConfig(k);
+		return Util.getSafeConfig(k);
 	}
 	@JavascriptInterface
 	public void saveConfig(String k, String v) {

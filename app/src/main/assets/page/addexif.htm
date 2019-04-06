@@ -1,8 +1,11 @@
 <div class="cs_page" id="page_asset_addexif">
 	<div class="titlebar">
-		根据文件名添加时间戳
+		文件浏览
 	</div>
 	<div class="container">
+		<div class="row csrow currentdir">
+			..
+		</div>
 		<div class="row csrow btnseldir" data-dir="..">
 			..
 		</div>
@@ -40,6 +43,7 @@
 					pageEle.find('.folders').append(n);
 				}
 			}
+			pageEle.find('.currentdir').html(arr_data[2])
 		}
 
 		pageEle.on('click', '.btnseldir', function(){

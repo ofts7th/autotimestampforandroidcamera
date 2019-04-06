@@ -394,6 +394,9 @@ public class WebViewActivityUtil {
             }
             s += files.get(i);
         }
+        s += ";";
+
+        s += currentDir.getAbsolutePath();
         return s;
     }
 }

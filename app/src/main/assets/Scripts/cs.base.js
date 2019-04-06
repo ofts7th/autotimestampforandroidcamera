@@ -41,8 +41,14 @@ function showMessage(msg) {
     $.cs.hideLoading();
     $.cs.showMessage(msg);
 }
-function getConfig(k) {
-    return local.getConfig(k);
+function getConfig(k, v) {
+    var o = local.getConfig(k);
+    if(o == ''){
+        if(v){
+            return v;
+        }
+    }
+    return o;
 }
 function saveConfig(k, v) {
     local.saveConfig(k, v);

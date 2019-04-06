@@ -93,7 +93,6 @@ public class Service1 extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //work();
-
         synchronized (objLock) {
             this.init();
         }

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.util.Date;
 
@@ -26,16 +27,42 @@ import cs.string;
  */
 
 public class ImageUtil {
+    static String showTimeOnImage = Util.getConfig("showTimeOnImage", "true");
+    static String waterMarkSuffix = Util.getConfig("waterMarkSuffix", "");
+    static int txtWatermarkSize = Integer.valueOf(Util.getConfig("txtWatermarkSize", "30"));
+    static String txtWatermarkColor = Util.getConfig("txtWatermarkColor", "ff6600");
+    static int txtWatermarkRightMargin = Integer.valueOf(Util.getConfig("txtWatermarkRightMargin", "30"));
+    static int txtWatermarkBottomMargin = Integer.valueOf(Util.getConfig("txtWatermarkBottomMargin", "30"));
+    static int imgJpegQulity = Integer.valueOf(Util.getConfig("imgJpegQulity", "70"));
+
     public static byte[] converBitmap2Bytes(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, Integer.valueOf(Util.getConfig("imgJpegQulity")), baos);
+        bm.compress(Bitmap.CompressFormat.JPEG, imgJpegQulity, baos);
         return baos.toByteArray();
     }
 
     public static void addTimeStamp(String path) {
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
-            bitmap = drawTextToRightBottom(bitmap, Util.formatDateHM(new Date()), Integer.valueOf(Util.getConfig("txtWatermarkSize")), Color.parseColor("#" + Util.getConfig("txtWatermarkColor")), Integer.valueOf(Util.getConfig("txtWatermarkRightMargin")), Integer.valueOf(Util.getConfig("txtWatermarkBottomMargin")));
+            int imageWidth = bitmap.getWidth();
+            int imageHeight = bitmap.getHeight();
+            float ratio = imageWidth > imageHeight ? (float) imageWidth / imageHeight : (float) imageHeight / imageWidth;
+
+            if (ratio > 2) {
+                return;
+            }
+
+            String waterMark = "";
+            if (showTimeOnImage.equals("false")) {
+                waterMark += Util.formatDate(new Date());
+            } else {
+                waterMark += Util.formatDateHM(new Date());
+            }
+            if (!string.IsNullOrEmpty(waterMarkSuffix)) {
+                waterMark += waterMarkSuffix;
+            }
+
+            bitmap = drawTextToRightBottom(bitmap, waterMark, txtWatermarkSize, Color.parseColor("#" + txtWatermarkColor), txtWatermarkRightMargin, txtWatermarkBottomMargin, getDpRatio(imageWidth, imageHeight));
 
             byte[] destBytes = converBitmap2Bytes(bitmap);
 
@@ -79,15 +106,15 @@ public class ImageUtil {
     }
 
     public static Bitmap drawTextToRightBottom(Bitmap bitmap, String text,
-                                               int size, int color, int paddingRight, int paddingBottom) {
+                                               int size, int color, int paddingRight, int paddingBottom, float dpRatio) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(color);
-        paint.setTextSize(dp2px(size));
+        paint.setTextSize(size * dpRatio);
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
         return drawTextToBitmap(bitmap, text, paint, bounds,
-                bitmap.getWidth() - bounds.width() - dp2px(paddingRight),
-                bitmap.getHeight() - dp2px(paddingBottom));
+                (int) (bitmap.getWidth() - bounds.width() - paddingRight * dpRatio),
+                (int) (bitmap.getHeight() - paddingBottom * dpRatio));
     }
 
     private static Bitmap drawTextToBitmap(Bitmap bitmap, String text,
@@ -106,8 +133,8 @@ public class ImageUtil {
         return bitmap;
     }
 
-    public static int dp2px(float dp) {
-        final float scale = Util.applicationContext.getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
+    public static float getDpRatio(int imgWidth, int imgHeight) {
+        float bigger = imgWidth > imgHeight ? (float) imgWidth : (float) imgHeight;
+        return bigger / 2000;
     }
 }

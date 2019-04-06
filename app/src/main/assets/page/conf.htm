@@ -46,7 +46,7 @@
             </div>
             <div class="row csrow">
                 <div class="col-xs-4 serveritem">
-                    相册路径
+                    相册路径(重启后生效)
                 </div>
                 <div class="col-xs-8">
                     <input type="textbox" class="dirCameraPath"/>
@@ -86,15 +86,15 @@
 			saveConfig('dirCameraPath', pageEle.find('.dirCameraPath').val());
 			saveConfig('showTimeOnImage', pageEle.find('.showTimeOnImage').val());
 			saveConfig('waterMarkSuffix', pageEle.find('.waterMarkSuffix').val());
-
-			$.cs.showMessage('保存成功，请关闭程序，重启后生效');
+            local.refreshConfig();
+			$.cs.showMessage('保存成功');
 		});
 
-		pageEle.find('.txtWatermarkSize').val(getConfig('txtWatermarkSize', '30'));
-		pageEle.find('.txtWatermarkColor').val(getConfig('txtWatermarkColor', 'ff6600'));
-		pageEle.find('.txtWatermarkRightMargin').val(getConfig('txtWatermarkRightMargin', '30'));
-		pageEle.find('.txtWatermarkBottomMargin').val(getConfig('txtWatermarkBottomMargin', '30'));
-		pageEle.find('.imgJpegQulity').val(getConfig('imgJpegQulity', '70'));
+		pageEle.find('.txtWatermarkSize').val(getConfig('txtWatermarkSize', '60'));
+		pageEle.find('.txtWatermarkColor').val(getConfig('txtWatermarkColor', 'ffa100'));
+		pageEle.find('.txtWatermarkRightMargin').val(getConfig('txtWatermarkRightMargin', '60'));
+		pageEle.find('.txtWatermarkBottomMargin').val(getConfig('txtWatermarkBottomMargin', '60'));
+		pageEle.find('.imgJpegQulity').val(getConfig('imgJpegQulity', '75'));
 		pageEle.find('.dirCameraPath').val(getConfig('dirCameraPath'));
 		pageEle.find('.showTimeOnImage').val(getConfig('showTimeOnImage', 'true'));
 		pageEle.find('.waterMarkSuffix').val(getConfig('waterMarkSuffix'));

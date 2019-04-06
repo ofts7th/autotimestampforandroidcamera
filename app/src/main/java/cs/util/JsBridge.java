@@ -65,4 +65,9 @@ public class JsBridge {
 	public String getChild(String s) {
 		return this.util.getChild(s);
 	}
+
+	@JavascriptInterface
+	public void refreshConfig(){
+		this.util.refreshConfig();
+	}
 }

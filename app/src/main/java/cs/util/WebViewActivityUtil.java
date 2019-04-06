@@ -399,4 +399,8 @@ public class WebViewActivityUtil {
         s += currentDir.getAbsolutePath();
         return s;
     }
+
+    public void refreshConfig(){
+        ImageUtil.refreshConfig();
+    }
 }

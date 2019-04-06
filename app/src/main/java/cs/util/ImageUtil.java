@@ -27,13 +27,27 @@ import cs.string;
  */
 
 public class ImageUtil {
-    static String showTimeOnImage = Util.getConfig("showTimeOnImage", "true");
-    static String waterMarkSuffix = Util.getConfig("waterMarkSuffix", "");
-    static int txtWatermarkSize = Integer.valueOf(Util.getConfig("txtWatermarkSize", "30"));
-    static String txtWatermarkColor = Util.getConfig("txtWatermarkColor", "ff6600");
-    static int txtWatermarkRightMargin = Integer.valueOf(Util.getConfig("txtWatermarkRightMargin", "30"));
-    static int txtWatermarkBottomMargin = Integer.valueOf(Util.getConfig("txtWatermarkBottomMargin", "30"));
-    static int imgJpegQulity = Integer.valueOf(Util.getConfig("imgJpegQulity", "70"));
+    static String showTimeOnImage;
+    static String waterMarkSuffix;
+    static int txtWatermarkSize;
+    static String txtWatermarkColor;
+    static int txtWatermarkRightMargin;
+    static int txtWatermarkBottomMargin;
+    static int imgJpegQulity;
+
+    static {
+        refreshConfig();
+    }
+
+    public static void refreshConfig() {
+        showTimeOnImage = Util.getConfig("showTimeOnImage", "true");
+        waterMarkSuffix = Util.getConfig("waterMarkSuffix", "");
+        txtWatermarkSize = Integer.valueOf(Util.getConfig("txtWatermarkSize", "60"));
+        String txtWatermarkColor = Util.getConfig("txtWatermarkColor", "ffa100");
+        txtWatermarkRightMargin = Integer.valueOf(Util.getConfig("txtWatermarkRightMargin", "60"));
+        txtWatermarkBottomMargin = Integer.valueOf(Util.getConfig("txtWatermarkBottomMargin", "60"));
+        imgJpegQulity = Integer.valueOf(Util.getConfig("imgJpegQulity", "75"));
+    }
 
     public static byte[] converBitmap2Bytes(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

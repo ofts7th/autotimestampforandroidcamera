@@ -1,12 +1,15 @@
 <div class="cs_page fullfill homepage" id="page_asset_index">
     <div class="titlebar">
-        拍照自动添加日期，by【城南大猫】，2019
+        拍照自动添加日期，by【樵夫】，2019
     </div>
     <div class="csrow assetpagelink" data-url="conf.htm">
         水印设置
     </div>
     <div class="csrow seldir">
         手动添加水印
+    </div>
+    <div class="csrow">
+        <a href="javascript:;" class="switchmonitor btn btn-default"></a>
     </div>
     <div class="csrow">
         <a href="javascript:;" class="closeapp btn btn-default">关闭程序</a>
@@ -18,11 +21,31 @@
             pageEle.find('.closeapp').click(function(){
                 local.exitApp();
             });
-
+            var monitorWorking = local.getConfig('monitorWorking');
+            if(monitorWorking == ''){
+                monitorWorking = 'true';
+            }
+            function refreshMonitorWorking(){
+                if(monitorWorking == 'true'){
+                    pageEle.find('.switchmonitor').html('关闭水印')
+                }else{
+                    pageEle.find('.switchmonitor').html('开启水印')
+                }
+            }
+            pageEle.find('.switchmonitor').click(function(){
+                if(monitorWorking == 'true'){
+                    monitorWorking = 'false';
+                }else{
+                    monitorWorking = 'true';
+                }
+                refreshMonitorWorking();
+                local.refreshMonitorWorking(monitorWorking);
+            });
             pageEle.find('.seldir').click(function(){
                 nextPageForSelDir = "manualaddwatermark.htm";
                 $.cs.gotoPage({source: 'asset', url: 'seldir.htm'});
             });
+            refreshMonitorWorking();
         });
     </script>
 </div>

@@ -17,6 +17,10 @@ import cs.util.Util;
  */
 
 public class ImageAutoProcessor {
+    public static boolean monitorWorking;
+    static {
+        monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
+    }
     private Context ctx;
 
     ArrayList<String> dirCameraPathList = new ArrayList<>();
@@ -75,6 +79,8 @@ public class ImageAutoProcessor {
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
+            if(!ImageAutoProcessor.monitorWorking)
+                return;
 
             String whereClause = null;
             if (!string.IsNullOrEmpty(lastImageDate)) {

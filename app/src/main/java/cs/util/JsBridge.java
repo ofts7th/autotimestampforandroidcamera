@@ -85,6 +85,11 @@ public class JsBridge {
     }
 
     @JavascriptInterface
+    public void refreshMonitorWorking(String v) {
+        this.util.refreshMonitorWorking(v);
+    }
+
+    @JavascriptInterface
     public void manualAddWaterMark(String info) {
         String[] ss = info.split(",");
         String mark = "";

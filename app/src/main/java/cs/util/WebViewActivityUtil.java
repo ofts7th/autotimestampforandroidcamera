@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 import cs.mobile.WebViewActivity;
 import cs.string;
+import cs.timestamp.ImageAutoProcessor;
 
 public class WebViewActivityUtil {
     private WebViewActivity _activity;
@@ -449,5 +450,10 @@ public class WebViewActivityUtil {
             date = Util.parseDate(strDate);
         }
         ImageUtil.addTimeStamp(path, date);
+    }
+
+    public void refreshMonitorWorking(String v) {
+        Util.saveConfig("monitorWorking", v);
+        ImageAutoProcessor.monitorWorking = v.equals("true");
     }
 }

@@ -25,7 +25,7 @@ public class Receiver1 extends BroadcastReceiver {
     @Override
     public void onReceive(Context ctx, Intent i) {
         if (i.getAction().equals(BOOT_ACTION)) {
-            Intent intent = new Intent(ctx, Service1.class);
+            Intent intent = new Intent(Util.applicationContext, Service1.class);
             ctx.startService(intent);
         }
     }

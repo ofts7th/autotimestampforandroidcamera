@@ -18,15 +18,14 @@ import cs.util.Util;
 
 public class ImageAutoProcessor {
     public static boolean monitorWorking;
+
     static {
         monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
     }
-    private Context ctx;
 
     ArrayList<String> dirCameraPathList = new ArrayList<>();
 
-    public ImageAutoProcessor(Context ctx) {
-        this.ctx = ctx;
+    public ImageAutoProcessor() {
         String dirCameraPath = Util.getConfig("dirCameraPath");
         if (!string.IsNullOrEmpty(dirCameraPath)) {
             for (String s : dirCameraPath.split(",")) {
@@ -44,7 +43,7 @@ public class ImageAutoProcessor {
         if (observerCreated) {
             return;
         }
-        Cursor cursor = ctx.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
+        Cursor cursor = Util.applicationContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
         while (cursor.moveToNext()) {
             long modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
             lastImageDate = String.valueOf(modifiedTime);
@@ -58,7 +57,7 @@ public class ImageAutoProcessor {
     MyImageObserver imagesObserver = null;
 
     public void createObservers() {
-        ContentResolver resolver = ctx.getContentResolver();
+        ContentResolver resolver = Util.applicationContext.getContentResolver();
         imagesObserver = new MyImageObserver();
         resolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, imagesObserver);
         this.observerCreated = true;
@@ -66,7 +65,7 @@ public class ImageAutoProcessor {
 
     public void destroyObservers() {
         if (this.observerCreated) {
-            ContentResolver resolver = ctx.getContentResolver();
+            ContentResolver resolver = Util.applicationContext.getContentResolver();
             resolver.unregisterContentObserver(imagesObserver);
         }
     }
@@ -79,7 +78,7 @@ public class ImageAutoProcessor {
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            if(!ImageAutoProcessor.monitorWorking)
+            if (!ImageAutoProcessor.monitorWorking)
                 return;
 
             String whereClause = null;
@@ -87,7 +86,7 @@ public class ImageAutoProcessor {
                 whereClause = MediaStore.Images.Media.DATE_MODIFIED + " > " + lastImageDate;
             }
             try {
-                ContentResolver resolver = ctx.getContentResolver();
+                ContentResolver resolver = Util.applicationContext.getContentResolver();
                 Cursor cursor = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, whereClause, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
                 ArrayList<String> files = new ArrayList<>();
                 boolean isFirst = true;
@@ -122,19 +121,10 @@ public class ImageAutoProcessor {
                     files.add(fileName);
                 }
                 cursor.close();
-                processFiles(files);
+                ImageUtil.processFiles(files);
                 processedItems = files;
             } catch (Exception ex) {
             }
-        }
-    }
-
-    private void processFiles(ArrayList<String> files) {
-        if (files.size() == 0)
-            return;
-
-        for (String f : files) {
-            ImageUtil.addTimeStamp(f);
         }
     }
 }

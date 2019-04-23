@@ -46,7 +46,7 @@ public class Service1 extends Service {
 
     private void startImageProcessor() {
         if (processor == null) {
-            processor = new ImageAutoProcessor(this);
+            processor = new ImageAutoProcessor();
             processor.start();
         }
     }

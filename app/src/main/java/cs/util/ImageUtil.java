@@ -20,6 +20,7 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import cs.string;
@@ -36,6 +37,7 @@ public class ImageUtil {
     static int txtWatermarkRightMargin;
     static int txtWatermarkBottomMargin;
     static int imgJpegQulity;
+    static int sleepTime;
 
     static {
         refreshConfig();
@@ -49,6 +51,7 @@ public class ImageUtil {
         txtWatermarkRightMargin = Integer.valueOf(Util.getConfig("txtWatermarkRightMargin", "60"));
         txtWatermarkBottomMargin = Integer.valueOf(Util.getConfig("txtWatermarkBottomMargin", "60"));
         imgJpegQulity = Integer.valueOf(Util.getConfig("imgJpegQulity", "75"));
+        sleepTime = Integer.valueOf(Util.getConfig("sleepTime", "10"));
     }
 
     public static byte[] converBitmap2Bytes(Bitmap bm) {
@@ -66,11 +69,11 @@ public class ImageUtil {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             int imageWidth = bitmap.getWidth();
             int imageHeight = bitmap.getHeight();
-            float ratio = imageWidth > imageHeight ? (float) imageWidth / imageHeight : (float) imageHeight / imageWidth;
-
-            if (ratio > 2) {
-                return;
-            }
+//            float ratio = imageWidth > imageHeight ? (float) imageWidth / imageHeight : (float) imageHeight / imageWidth;
+//
+//            if (ratio > 2) {
+//                return;
+//            }
 
             if (date == null) {
                 date = new Date();
@@ -189,5 +192,24 @@ public class ImageUtil {
             return parseDate1(s);
         }
         return null;
+    }
+
+    public static void processFiles(final ArrayList<String> files) {
+        if (files.size() == 0)
+            return;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(sleepTime);
+                    for (String f : files) {
+                        ImageUtil.addTimeStamp(f);
+                    }
+                } catch (Exception ex) {
+
+                }
+            }
+        }).start();
     }
 }

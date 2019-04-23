@@ -62,6 +62,14 @@
             </div>
             <div class="row csrow">
                 <div class="col-xs-4 serveritem">
+                    延时
+                </div>
+                <div class="col-xs-8">
+                    <input type="textbox" class="sleepTime"/>
+                </div>
+            </div>
+            <div class="row csrow">
+                <div class="col-xs-4 serveritem">
                     水印后缀
                 </div>
                 <div class="col-xs-8">
@@ -86,6 +94,7 @@
 			saveConfig('dirCameraPath', pageEle.find('.dirCameraPath').val());
 			saveConfig('showTimeOnImage', pageEle.find('.showTimeOnImage').val());
 			saveConfig('waterMarkSuffix', pageEle.find('.waterMarkSuffix').val());
+			saveConfig('sleepTime', pageEle.find('.sleepTime').val());
             local.refreshConfig();
 			$.cs.showMessage('保存成功');
 		});
@@ -98,6 +107,7 @@
 		pageEle.find('.dirCameraPath').val(getConfig('dirCameraPath'));
 		pageEle.find('.showTimeOnImage').val(getConfig('showTimeOnImage', 'true'));
 		pageEle.find('.waterMarkSuffix').val(getConfig('waterMarkSuffix'));
+		pageEle.find('.sleepTime').val(getConfig('sleepTime'));
 	});
 
     </script>

@@ -195,9 +195,6 @@ public class ImageUtil {
     }
 
     public static void processFiles(final ArrayList<String> files) {
-        if (files.size() == 0)
-            return;
-
         new Thread(new Runnable() {
             @Override
             public void run() {

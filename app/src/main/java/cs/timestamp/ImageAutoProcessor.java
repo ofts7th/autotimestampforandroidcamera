@@ -83,14 +83,21 @@ public class ImageAutoProcessor {
 
             String whereClause = null;
             if (!string.IsNullOrEmpty(lastImageDate)) {
-                whereClause = MediaStore.Images.Media.DATE_MODIFIED + " > " + lastImageDate;
+                whereClause = MediaStore.Images.Media.DATE_MODIFIED + " >= " + lastImageDate;
             }
             try {
                 ContentResolver resolver = Util.applicationContext.getContentResolver();
                 Cursor cursor = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, whereClause, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
                 ArrayList<String> files = new ArrayList<>();
                 boolean isFirst = true;
+                String latestImageDate = "";
                 while (cursor.moveToNext()) {
+                    long modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
+                    String imageModifiedDate = String.valueOf(modifiedTime);
+                    if (isFirst) {
+                        latestImageDate = imageModifiedDate;
+                        isFirst = false;
+                    }
                     String fileName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     String lowerCaseName = fileName.toLowerCase();
                     if (!lowerCaseName.endsWith(".jpg") && !lowerCaseName.endsWith("jpeg")) {
@@ -113,16 +120,18 @@ public class ImageAutoProcessor {
                             continue;
                         }
                     }
-                    if (isFirst) {
-                        long modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
-                        lastImageDate = String.valueOf(modifiedTime);
-                        isFirst = false;
-                    }
                     files.add(fileName);
                 }
                 cursor.close();
-                ImageUtil.processFiles(files);
-                processedItems = files;
+                if (files.size() > 0) {
+                    if (lastImageDate.equals(latestImageDate)) {
+                        processedItems.addAll(files);
+                    } else {
+                        lastImageDate = latestImageDate;
+                        processedItems = files;
+                    }
+                    ImageUtil.processFiles(files);
+                }
             } catch (Exception ex) {
             }
         }

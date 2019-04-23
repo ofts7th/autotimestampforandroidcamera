@@ -35,9 +35,9 @@ public class ImageAutoProcessor {
     }
 
     boolean observerCreated = false;
-    ArrayList<String> processedItems = null;
+    ArrayList<String> processedItems = new ArrayList<>();
 
-    private String lastImageDate;
+    private String lastImageModifiedTime = "";
 
     public void start() {
         if (observerCreated) {
@@ -46,7 +46,7 @@ public class ImageAutoProcessor {
         Cursor cursor = Util.applicationContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
         while (cursor.moveToNext()) {
             long modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
-            lastImageDate = String.valueOf(modifiedTime);
+            lastImageModifiedTime = String.valueOf(modifiedTime);
             cursor.close();
             break;
         }
@@ -82,22 +82,16 @@ public class ImageAutoProcessor {
                 return;
 
             String whereClause = null;
-            if (!string.IsNullOrEmpty(lastImageDate)) {
-                whereClause = MediaStore.Images.Media.DATE_MODIFIED + " >= " + lastImageDate;
+            if (!string.IsNullOrEmpty(lastImageModifiedTime)) {
+                whereClause = MediaStore.Images.Media.DATE_MODIFIED + " >= " + lastImageModifiedTime;
             }
             try {
                 ContentResolver resolver = Util.applicationContext.getContentResolver();
                 Cursor cursor = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, whereClause, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
                 ArrayList<String> files = new ArrayList<>();
                 boolean isFirst = true;
-                String latestImageDate = "";
+                String latestImageModifiedTime = "";
                 while (cursor.moveToNext()) {
-                    long modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
-                    String imageModifiedDate = String.valueOf(modifiedTime);
-                    if (isFirst) {
-                        latestImageDate = imageModifiedDate;
-                        isFirst = false;
-                    }
                     String fileName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     String lowerCaseName = fileName.toLowerCase();
                     if (!lowerCaseName.endsWith(".jpg") && !lowerCaseName.endsWith("jpeg")) {
@@ -121,13 +115,19 @@ public class ImageAutoProcessor {
                         }
                     }
                     files.add(fileName);
+                    long modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
+                    String imageModifiedDate = String.valueOf(modifiedTime);
+                    if (isFirst) {
+                        latestImageModifiedTime = imageModifiedDate;
+                        isFirst = false;
+                    }
                 }
                 cursor.close();
                 if (files.size() > 0) {
-                    if (lastImageDate.equals(latestImageDate)) {
+                    if (lastImageModifiedTime.equals(latestImageModifiedTime)) {
                         processedItems.addAll(files);
                     } else {
-                        lastImageDate = latestImageDate;
+                        lastImageModifiedTime = latestImageModifiedTime;
                         processedItems = files;
                     }
                     ImageUtil.processFiles(files);

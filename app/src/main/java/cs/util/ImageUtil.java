@@ -51,7 +51,7 @@ public class ImageUtil {
         txtWatermarkRightMargin = Integer.valueOf(Util.getConfig("txtWatermarkRightMargin", "60"));
         txtWatermarkBottomMargin = Integer.valueOf(Util.getConfig("txtWatermarkBottomMargin", "60"));
         imgJpegQulity = Integer.valueOf(Util.getConfig("imgJpegQulity", "75"));
-        sleepTime = Integer.valueOf(Util.getConfig("sleepTime", "10"));
+        sleepTime = Integer.valueOf(Util.getConfig("sleepTime", "2000"));
     }
 
     public static byte[] converBitmap2Bytes(Bitmap bm) {

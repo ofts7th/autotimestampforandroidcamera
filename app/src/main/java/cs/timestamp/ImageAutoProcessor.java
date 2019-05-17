@@ -17,21 +17,29 @@ import cs.util.Util;
  */
 
 public class ImageAutoProcessor {
-    public static boolean monitorWorking;
+    public static ImageAutoProcessor instance;
 
     static {
-        monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
+        instance = new ImageAutoProcessor();
     }
 
+    public boolean monitorWorking;
     ArrayList<String> dirCameraPathList = new ArrayList<>();
 
-    public ImageAutoProcessor() {
+    public void refreshConfig() {
+        monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
+
+        dirCameraPathList.clear();
         String dirCameraPath = Util.getConfig("dirCameraPath");
         if (!string.IsNullOrEmpty(dirCameraPath)) {
             for (String s : dirCameraPath.split(",")) {
                 dirCameraPathList.add(s);
             }
         }
+    }
+
+    private ImageAutoProcessor() {
+        refreshConfig();
     }
 
     boolean observerCreated = false;
@@ -70,7 +78,7 @@ public class ImageAutoProcessor {
         }
     }
 
-    public class MyImageObserver extends ContentObserver {
+    private class MyImageObserver extends ContentObserver {
         public MyImageObserver() {
             super(null);
         }
@@ -78,12 +86,20 @@ public class ImageAutoProcessor {
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            if (!ImageAutoProcessor.monitorWorking)
+            if (!monitorWorking)
                 return;
 
             String whereClause = null;
             if (!string.IsNullOrEmpty(lastImageModifiedTime)) {
-                whereClause = MediaStore.Images.Media.DATE_MODIFIED + " >= " + lastImageModifiedTime;
+                whereClause = MediaStore.Images.Media.DATE_MODIFIED;
+                //when the app start, donot include the history images
+                if (processedItems.size() == 0) {
+                    whereClause += " > ";
+                } else {
+                    //in case take more than one images during one second
+                    whereClause += " >= ";
+                }
+                whereClause += lastImageModifiedTime;
             }
             try {
                 ContentResolver resolver = Util.applicationContext.getContentResolver();

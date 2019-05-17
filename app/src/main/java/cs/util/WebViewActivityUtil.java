@@ -409,6 +409,7 @@ public class WebViewActivityUtil {
 
     public void refreshConfig() {
         ImageUtil.refreshConfig();
+        ImageAutoProcessor.instance.refreshConfig();
     }
 
     public String getImagesData() {

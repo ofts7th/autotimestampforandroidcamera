@@ -6,6 +6,7 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 
 import cs.string;
@@ -24,9 +25,11 @@ public class ImageAutoProcessor {
     }
 
     private boolean monitorWorking;
-    public void refreshMonitorWorking(){
+
+    public void refreshMonitorWorking() {
         monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
     }
+
     ArrayList<String> dirCameraPathList = new ArrayList<>();
 
     public void refreshConfig() {
@@ -151,6 +154,43 @@ public class ImageAutoProcessor {
                     ImageUtil.processFiles(files);
                 }
             } catch (Exception ex) {
+            }
+        }
+    }
+
+    public void refreshVibratorConf(String v) {
+        if (v.equals("true")) {
+            runRootCmd("chmod 777 /sys/devices/virtual/timed_output/vibrator/enable");
+        } else {
+            runRootCmd("chmod 444 /sys/devices/virtual/timed_output/vibrator/enable");
+        }
+    }
+
+    public void processVibratorConf() {
+        String conf = Util.getSafeConfig("");
+        if (conf.equals("false")) {
+            runRootCmd("chmod 444 /sys/devices/virtual/timed_output/vibrator/enable");
+        }
+    }
+
+    private void runRootCmd(String cmd) {
+        Process process = null;
+        DataOutputStream os = null;
+        try {
+            process = Runtime.getRuntime().exec("su");
+            os = new DataOutputStream(process.getOutputStream());
+            os.writeBytes(cmd + "\n");
+            os.writeBytes("exit\n");
+            os.flush();
+            process.waitFor();
+        } catch (Exception e) {
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+                process.destroy();
+            } catch (Exception e) {
             }
         }
     }

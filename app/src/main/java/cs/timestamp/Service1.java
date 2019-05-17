@@ -48,32 +48,8 @@ public class Service1 extends Service {
     private void startImageProcessor() {
         if (processor == null) {
             processor = ImageAutoProcessor.instance;
+            processor.processVibratorConf();
             processor.start();
-        }
-
-        disableVibrator();
-    }
-
-    private void disableVibrator() {
-        Process process = null;
-        DataOutputStream os = null;
-        try {
-            String cmd = "chmod 444 /sys/devices/virtual/timed_output/vibrator/enable";
-            process = Runtime.getRuntime().exec("su");
-            os = new DataOutputStream(process.getOutputStream());
-            os.writeBytes(cmd + "\n");
-            os.writeBytes("exit\n");
-            os.flush();
-            process.waitFor();
-        } catch (Exception e) {
-        } finally {
-            try {
-                if (os != null) {
-                    os.close();
-                }
-                process.destroy();
-            } catch (Exception e) {
-            }
         }
     }
 

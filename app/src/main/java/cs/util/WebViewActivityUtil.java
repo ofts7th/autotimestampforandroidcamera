@@ -457,4 +457,9 @@ public class WebViewActivityUtil {
         Util.saveConfig("monitorWorking", v);
         ImageAutoProcessor.instance.refreshMonitorWorking();
     }
+
+    public void refreshVibratorConf(String v){
+        Util.saveConfig("vibratorConf", v);
+        ImageAutoProcessor.instance.refreshVibratorConf(v);
+    }
 }

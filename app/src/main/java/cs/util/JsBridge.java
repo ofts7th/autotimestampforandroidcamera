@@ -103,4 +103,9 @@ public class JsBridge {
     public String getImagesData() {
         return this.util.getImagesData();
     }
+
+    @JavascriptInterface
+    public void refreshVibratorConf(String v) {
+        this.util.refreshVibratorConf(v);
+    }
 }

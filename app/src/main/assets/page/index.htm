@@ -21,6 +21,7 @@
             pageEle.find('.closeapp').click(function(){
                 local.exitApp();
             });
+
             var monitorWorking = local.getConfig('monitorWorking');
             if(monitorWorking == ''){
                 monitorWorking = 'true';
@@ -41,11 +42,34 @@
                 refreshMonitorWorking();
                 local.refreshMonitorWorking(monitorWorking);
             });
+            refreshMonitorWorking();
+
+            var vibratorConf = local.getConfig('vibratorConf');
+            if(vibratorConf == ''){
+                vibratorConf = 'true';
+            }
+            function refreshVibratorConf(){
+                if(vibratorConf == 'true'){
+                    pageEle.find('.switchvibrator').html('关闭震动')
+                }else{
+                    pageEle.find('.switchvibrator').html('开启震动')
+                }
+            }
+            pageEle.find('.switchvibrator').click(function(){
+                if(vibratorConf == 'true'){
+                    vibratorConf = 'false';
+                }else{
+                    vibratorConf = 'true';
+                }
+                refreshVibratorConf();
+                local.refreshVibratorConf(vibratorConf);
+            });
+            refreshVibratorConf();
+
             pageEle.find('.seldir').click(function(){
                 nextPageForSelDir = "manualaddwatermark.htm";
                 $.cs.gotoPage({source: 'asset', url: 'seldir.htm'});
             });
-            refreshMonitorWorking();
         });
     </script>
 </div>

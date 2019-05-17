@@ -167,7 +167,7 @@ public class ImageAutoProcessor {
     }
 
     public void processVibratorConf() {
-        String conf = Util.getSafeConfig("");
+        String conf = Util.getSafeConfig("vibratorConf");
         if (conf.equals("false")) {
             runRootCmd("chmod 444 /sys/devices/virtual/timed_output/vibrator/enable");
         }

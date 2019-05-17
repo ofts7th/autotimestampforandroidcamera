@@ -455,6 +455,6 @@ public class WebViewActivityUtil {
 
     public void refreshMonitorWorking(String v) {
         Util.saveConfig("monitorWorking", v);
-        ImageAutoProcessor.monitorWorking = v.equals("true");
+        ImageAutoProcessor.instance.refreshMonitorWorking();
     }
 }

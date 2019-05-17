@@ -23,12 +23,13 @@ public class ImageAutoProcessor {
         instance = new ImageAutoProcessor();
     }
 
-    public boolean monitorWorking;
+    private boolean monitorWorking;
+    public void refreshMonitorWorking(){
+        monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
+    }
     ArrayList<String> dirCameraPathList = new ArrayList<>();
 
     public void refreshConfig() {
-        monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
-
         dirCameraPathList.clear();
         String dirCameraPath = Util.getConfig("dirCameraPath");
         if (!string.IsNullOrEmpty(dirCameraPath)) {
@@ -36,6 +37,7 @@ public class ImageAutoProcessor {
                 dirCameraPathList.add(s);
             }
         }
+        refreshMonitorWorking();
     }
 
     private ImageAutoProcessor() {

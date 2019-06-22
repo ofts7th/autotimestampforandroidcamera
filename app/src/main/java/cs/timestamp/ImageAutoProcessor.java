@@ -28,6 +28,9 @@ public class ImageAutoProcessor {
 
     public void refreshMonitorWorking() {
         monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
+        if(monitorWorking){
+            refreshLastImageModifiedTime();
+        }
     }
 
     ArrayList<String> dirCameraPathList = new ArrayList<>();
@@ -56,6 +59,11 @@ public class ImageAutoProcessor {
         if (observerCreated) {
             return;
         }
+        refreshLastImageModifiedTime();
+        this.createObservers();
+    }
+
+    private void refreshLastImageModifiedTime(){
         Cursor cursor = Util.applicationContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
         while (cursor.moveToNext()) {
             long modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
@@ -63,7 +71,6 @@ public class ImageAutoProcessor {
             cursor.close();
             break;
         }
-        this.createObservers();
     }
 
     //observer

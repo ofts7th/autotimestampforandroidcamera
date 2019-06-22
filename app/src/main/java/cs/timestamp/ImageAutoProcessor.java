@@ -30,6 +30,7 @@ public class ImageAutoProcessor {
         monitorWorking = !Util.getSafeConfig("monitorWorking").equals("false");
         if(monitorWorking){
             refreshLastImageModifiedTime();
+            processedItems.clear();
         }
     }
 
